@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Alarm Clock</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .container {
+      margin-top: 100px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Alarm Clock</h1>
+    <div>
+      <label for="alarmTime">Set Alarm Time:</label>
+      <input type="time" id="alarmTime">
+      <button onclick="setAlarm()">Set Alarm</button>
+      <button onclick="stopAlarm()">Stop Alarm</button>
+    </div>
+  </div>
+
+  <script>
+    var alarmAudio = new Audio('path_to_alarm_sound.mp3');
+    var alarmTimeout;
+
+    function setAlarm() {
+      var alarmTime = document.getElementById('alarmTime').value;
+      var now = new Date();
+      var alarm = new Date(now.toDateString() + ' ' + alarmTime);
+
+      var timeDifference = alarm - now;
+      if (timeDifference < 0) {
+        alert('Please select a future time.');
+        return;
+      }
+
+      alarmTimeout = setTimeout(playAlarm, timeDifference);
+      document.getElementById('alarmTime').disabled = true;
+      document.querySelector('button[onclick="setAlarm()"]').disabled = true;
+    }
+
+    function playAlarm() {
+      alarmAudio.play();
+      document.getElementById('alarmTime').disabled = false;
+      document.querySelector('button[onclick="setAlarm()"]').disabled = false;
+    }
+
+    function stopAlarm() {
+      clearTimeout(alarmTimeout);
+      alarmAudio.pause();
+      alarmAudio.currentTime = 0;
+      document.getElementById('alarmTime').disabled = false;
+      document.querySelector('button[onclick="setAlarm()"]').disabled = false;
+    }
+  </script>
+</body>
+</html>
